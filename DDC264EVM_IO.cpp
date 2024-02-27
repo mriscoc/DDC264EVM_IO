@@ -333,7 +333,7 @@ int __stdcall EVM_RegNameTable(int RegN, char* buf, int bufsize)
 }
 
 
-long __stdcall EVM_RegsTransfers(int* USBdev, long* RegsIn, long* RegEnable, long* RegsOut) {
+long __stdcall EVM_RegsTransfer(int* USBdev, long* RegsIn, long* RegEnable, long* RegsOut) {
 
     CCyUSBDevice* USBDevice = new CCyUSBDevice(NULL);
 

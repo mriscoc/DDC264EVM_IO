@@ -11,5 +11,5 @@ EVM_ResetDDC
 EVM_ClearTriggers
 EVM_DataSequence
 EVM_RegNameTable
-EVM_RegsTransfers
+EVM_RegsTransfer
 EVM_DataCap

@@ -59,6 +59,6 @@ bool  __stdcall EVM_DataSequence(int* USBdev, byte* CFGHIGH, byte* CFGLOW);
 
 int __stdcall EVM_RegNameTable(int RegN, char* buf, int bufsize);
 
-long __stdcall EVM_RegsTransfers(int* USBdev, long* RegsIn, long* RegEnable, long* RegsOut = nullptr);
+long __stdcall EVM_RegsTransfer(int* USBdev, long* RegsIn, long* RegEnable, long* RegsOut = nullptr);
 
 long __stdcall EVM_DataCap(int* USBdev, long Channels, long nDVALIDReads, double* DataArray, long* AllDataAorBfirst);
