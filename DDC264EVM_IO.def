@@ -1,0 +1,15 @@
+LIBRARY "DDC264EVM_IO.dll"
+EXPORTS ;List functions to export
+ReadDeviceDescriptors
+ReadInterfaceDescriptors
+XferDataOut
+XferDataIn
+dllID
+dllCprght
+EVM_RegDataOut
+EVM_ResetDDC
+EVM_ClearTriggers
+EVM_DataSequence
+EVM_RegNameTable
+EVM_RegsTransfers
+EVM_DataCap

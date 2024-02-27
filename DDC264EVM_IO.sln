@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34024.191
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DDC264EVM_IO", "DDC264EVM_IO.vcxproj", "{698D5743-1B32-47D6-9D99-E8DEF42A330A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{698D5743-1B32-47D6-9D99-E8DEF42A330A}.Debug|x86.ActiveCfg = Debug|Win32
+		{698D5743-1B32-47D6-9D99-E8DEF42A330A}.Debug|x86.Build.0 = Debug|Win32
+		{698D5743-1B32-47D6-9D99-E8DEF42A330A}.Release|x86.ActiveCfg = Release|Win32
+		{698D5743-1B32-47D6-9D99-E8DEF42A330A}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3189720D-62C4-44EC-A0F4-85268E15FF03}
+	EndGlobalSection
+EndGlobal
