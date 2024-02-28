@@ -176,7 +176,7 @@ partial class Program
 
     */
 
-    void DDC_Adquisition(ref double AllData)
+    void DDC_Adquisition(ref int[] AllData)
     {
         if (!EVM_ShowRegisters()) Environment.Exit(0);
 
@@ -203,7 +203,7 @@ partial class Program
             }
 
             int AllDataAorBfirst = 0;
-            ErrorFlag = EVM_DataCap(ref USBdev, CHANNEL_COUNT, NDVALID_READ, ref AllData, ref AllDataAorBfirst);
+            ErrorFlag = EVM_DataCap(ref USBdev, CHANNEL_COUNT, NDVALID_READ, ref AllData[0], ref AllDataAorBfirst);
             if (ErrorFlag != 0)
             {
                 // If there was an error in EVM_DataCap, display the error code

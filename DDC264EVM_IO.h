@@ -3,7 +3,7 @@
  * https://www.ti.com/tool/DDC264EVM
  *
  * Author: Miguel Risco-Castillo
- * Version: 3.2
+ * Version: 3.3
  * Date: 2024/02/27
  *
  * LICENSE: MIT License.
@@ -59,6 +59,6 @@ bool  __stdcall EVM_DataSequence(int* USBdev, byte* CFGHIGH, byte* CFGLOW);
 
 int __stdcall EVM_RegNameTable(int RegN, char* buf, int bufsize);
 
-long __stdcall EVM_RegsTransfer(int* USBdev, long* RegsIn, long* RegEnable, long* RegsOut = nullptr);
+long __stdcall EVM_RegsTransfer(int* USBdev, int* RegsIn, int* RegEnable, int* RegsOut = nullptr);
 
-long __stdcall EVM_DataCap(int* USBdev, long Channels, long nDVALIDReads, double* DataArray, long* AllDataAorBfirst);
+long __stdcall EVM_DataCap(int* USBdev, int Channels, int nDVALIDReads, int* DataArray, int* AllDataAorBfirst);

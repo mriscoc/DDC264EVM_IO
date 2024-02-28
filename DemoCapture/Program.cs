@@ -17,15 +17,15 @@ partial class Program
     private const string dataFile = "EVMdata.csv";
 
     // Configuration Registers
-    int CONV_LOW_INT = 1600;
-    int CONV_HIGH_INT = 1600;
-    int CONV_CONFIG = 0; // 0-Freerun, 1-Freerun, 2-Low, 3-High
+    const int CONV_LOW_INT = 1600;
+    const int CONV_HIGH_INT = 1600;
+    const int CONV_CONFIG = 0; // 0-Freerun, 1-Freerun, 2-Low, 3-High
     const int CLC_HIGH = 7;
     const int CLC_LOW = 7;
     const int DDC_CLK_CONFIG = 1; // 1=Running, 0=disabled;
     int CHANNEL_COUNT = 16;
-    int NDVALID_IGNORE = 255;
-    int NDVALID_READ = 256;
+    const int NDVALID_IGNORE = 255;
+    int NDVALID_READ = 1024; // This number must meet some requirements 
     const int DCLK_HIGH = 0;
     const int DCLK_LOW = 0;
     const int DCLK_CONFIG = 1; // 1=Running, 0=disabled
@@ -36,23 +36,21 @@ partial class Program
     const int CONV_WAIT_HIGH = 1550;
     const int CLKDELAY_AROUND_CONV = 0;
 
-    //// DDC Configuration Register bits
-    //const int DDCbit13 = 0; // CLKDIV
-    //const int DDCbit10 = 1; // Range[1]
-    //const int DDCbit9 = 1; // Range[0]
-    //const int DDCbit8 = 1; // Format: 0=16 bits, 1=20 bits
-    //const int DDCbit7 = 0; // SPEED
-    //const int DDCbit4 = 0; // SLEW
-    //const int DDCbit0 = 0; // TEST
-    //byte CFGLOW = (DDCbit7 << 7) + (DDCbit4 << 4) + DDCbit0;
-    //byte CFGHIGH = (DDCbit13 << 5) + (DDCbit10 << 2) + (DDCbit9 << 1) + DDCbit8;
-    byte CFGLOW = 0;
-    byte CFGHIGH = 7; // Range b11, 20 bits
+    // DDC Configuration Register bits
+    const int DDCbit13 = 0; // CLKDIV
+    const int DDCbit10 = 1; // Range[1]
+    const int DDCbit9 = 1; // Range[0]
+    const int DDCbit8 = 1; // Format: 0=16 bits, 1=20 bits
+    const int DDCbit7 = 0; // SPEED
+    const int DDCbit4 = 0; // SLEW
+    const int DDCbit0 = 0; // TEST
+    byte CFGLOW = (DDCbit7 << 7) + (DDCbit4 << 4) + DDCbit0;
+    byte CFGHIGH = (DDCbit13 << 5) + (DDCbit10 << 2) + (DDCbit9 << 1) + DDCbit8;
 
     int USBdev = 0; // DDC EVM board to send/receive data to/from
 
     // Register arrays
-    static int regsSize = 255;
+    const int regsSize = 255;
     int[] RegsIn = new int[regsSize];
     int[] RegsOut = new int[regsSize];
     int[] RegsEnable = new int[regsSize];
@@ -78,12 +76,12 @@ partial class Program
         }
 
         // Initialize the array to store values
-        double[] AllData = new double[program.CHANNEL_COUNT * 2 * program.NDVALID_READ];
+        int[] AllData = new int[program.CHANNEL_COUNT * program.NDVALID_READ];
 
-        program.DDC_Adquisition(ref AllData[0]);
+        program.DDC_Adquisition(ref AllData);
 
         // Show captured data
-        for (int i = 0; i < program.NDVALID_READ; i++)
+        for (int i = 0; i < program.CHANNEL_COUNT * program.NDVALID_READ; i++)
         {
             Console.WriteLine($"AllData[{i}] = {AllData[i]}");
         }

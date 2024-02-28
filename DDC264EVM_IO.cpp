@@ -3,13 +3,15 @@
  * https://www.ti.com/tool/DDC264EVM
  *
  * Author: Miguel Risco-Castillo
- * Version: 3.2
+ * Version: 3.3
  * Date: 2024/02/27
  *
  * LICENSE: MIT License.
  * 
  * Based on code examples published by Texas Instruments at USB_IO_FOR_VB6_API.
  */
+
+//#define DEBUG
 
 #include "StdAfx.h"
 #include "CyApi.h"
@@ -18,6 +20,14 @@
 #include <malloc.h>
 #include <math.h>
 #include <map>
+
+#ifdef DEBUG
+  #include<iostream>
+  using namespace std;
+  #define DEBUGECHO(TXT) cout << TXT << "\n"
+#else
+  #define DEBUGECHO(TXT) {}
+#endif
 
 BOOL APIENTRY DllMain(HANDLE hModule,
     DWORD  ul_reason_for_call,
@@ -37,7 +47,7 @@ BOOL APIENTRY DllMain(HANDLE hModule,
 
 
 // DDC264EVM_IO ID
-constexpr char DLL_ID[] = "DDC264EVM_IO ver 3.2";
+constexpr char DLL_ID[] = "DDC264EVM_IO ver 3.3";
 constexpr char DLL_C[] = "Miguel Risco-Castillo (c) 2024";
 
 #define STRINGLEN 65536 //the larger this number is, the faster the data is shifted in.
@@ -256,7 +266,7 @@ std::map<int, const char*> RegNameTable = {
     {0x06, "CONV_HIGH_REG_LSB"},
     {0x07, "DIVXCLK_REGS"},
     {0x08, "DDC_CLK_SEL"},
-    {0x09, "FORMAT[4],CHANNELS"},
+    {0x09, "FORMAT[4],CHANNELS[3:0]"},
     {0x0A, "DIVXCLK_DATA_REGS"},
     {0x0B, "DDC_DATA_CLK_SEL"},
     {0x0C, "nDVALIDS_IGNORE"},
@@ -333,7 +343,7 @@ int __stdcall EVM_RegNameTable(int RegN, char* buf, int bufsize)
 }
 
 
-long __stdcall EVM_RegsTransfer(int* USBdev, long* RegsIn, long* RegEnable, long* RegsOut) {
+long __stdcall EVM_RegsTransfer(int* USBdev, int* RegsIn, int* RegEnable, int* RegsOut) {
 
     CCyUSBDevice* USBDevice = new CCyUSBDevice(NULL);
 
@@ -349,7 +359,7 @@ long __stdcall EVM_RegsTransfer(int* USBdev, long* RegsIn, long* RegEnable, long
     DataStr[0] = (char)0x00;
     DataStr[1] = (char)0x00;
 
-    for (long i = 0; i < 256; i++)
+    for (int i = 0; i < 256; i++)
     {
         if (RegEnable[i] == 1)
         {
@@ -381,7 +391,7 @@ long __stdcall EVM_RegsTransfer(int* USBdev, long* RegsIn, long* RegEnable, long
         DataLen = 2048;
         XferSuccess = true;
         AllowedWaitCount = 16383;
-        while (XferSuccess == true && AllowedWaitCount > 0);
+        while (XferSuccess == true && AllowedWaitCount > 0)
         {
             if (USBDevice->BulkInEndPt)
             {
@@ -433,7 +443,7 @@ long __stdcall EVM_RegsTransfer(int* USBdev, long* RegsIn, long* RegEnable, long
             {
                 if (((long)Data[i]) < 256)
                 {
-                    RegsOut[((long)Data[i])] = ((long)Data[i + 1]);
+                    RegsOut[((int)Data[i])] = ((int)Data[i + 1]);
                 }
             }
         }
@@ -478,7 +488,7 @@ long __stdcall EVM_RegsTransfer(int* USBdev, long* RegsIn, long* RegEnable, long
 }
 
 
-long __stdcall EVM_DataCap(int* USBdev, long Channels, long nDVALIDReads, double* DataArray, long* AllDataAorBfirst) {
+long __stdcall EVM_DataCap(int* USBdev, int Channels, int nDVALIDReads, int* DataArray, int* AllDataAorBfirst) {
 
     long LenVar;
     unsigned char inputCmd[2];
@@ -497,7 +507,7 @@ long __stdcall EVM_DataCap(int* USBdev, long Channels, long nDVALIDReads, double
     //Bytes of data = Number of readings * 4
     BytesOfData = Channels * nDVALIDReads * 4;
 
-    double WorkingTemp;
+    int WorkingTemp;
     unsigned char DataCap[STRINGLEN];
 
     CCyUSBDevice* USBDevice = new CCyUSBDevice(NULL);   // Create an instance of CCyUSBDevice
@@ -530,6 +540,8 @@ long __stdcall EVM_DataCap(int* USBdev, long Channels, long nDVALIDReads, double
             }
         }
 
+        DEBUGECHO("Empty buffer");
+
         if (USBDevice->BulkInEndPt)  //emptys read buffer
         {
             StringLenRet = StringLen;
@@ -543,6 +555,8 @@ long __stdcall EVM_DataCap(int* USBdev, long Channels, long nDVALIDReads, double
                 AllowedWaitCount--;
             }
         }
+
+        DEBUGECHO("Starts a conversion");
 
         if (USBDevice->BulkOutEndPt)    //shifts out 0x10FF, which starts a conversion
         {
@@ -561,6 +575,9 @@ long __stdcall EVM_DataCap(int* USBdev, long Channels, long nDVALIDReads, double
         BytesRead = 0;
         if (USBDevice->BulkInEndPt)
         {
+
+            DEBUGECHO("Read first bunch of data");
+
             XferSuccess = false;
             AllowedWaitCount = 3; //10s at 250
             while (XferSuccess == false && AllowedWaitCount > 0)
@@ -600,6 +617,8 @@ long __stdcall EVM_DataCap(int* USBdev, long Channels, long nDVALIDReads, double
             USBDevice->Close();
             return(-10);
         }
+
+        DEBUGECHO("Read main bunch of data");
 
         while (BytesRead < BytesOfData)
         {

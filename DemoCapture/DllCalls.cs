@@ -54,6 +54,6 @@ partial class Program
     public static extern int EVM_RegsTransfer(ref int USBdev, ref int Array_RegsIn, ref int Array_RegEnable, ref int Array_RegsOut);
 
     [DllImport(dllFile, CallingConvention = CallingConvention.StdCall)]
-    public static extern int EVM_DataCap(ref int USBdev, int Channels, int Samples, ref double AllData, ref int AllDataAorBfirst);
+    public static extern int EVM_DataCap(ref int USBdev, int Channels, int Samples, ref int AllData, ref int AllDataAorBfirst);
 
 }
