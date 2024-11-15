@@ -213,8 +213,8 @@ int __stdcall EVM_RegDataOut(int* USBdev, int* Reg, int* Data)
 
     CCyUSBDevice* USBDevice = new CCyUSBDevice(NULL); // Create an instance of CCyUSBDevice - NULL means we don't register for pnp events
 
-    DataArr[0] = Reg && 0xFF;
-    DataArr[1] = Data && 0xFF;
+    DataArr[0] = *Reg && 0xFF;
+    DataArr[1] = *Data && 0xFF;
 
     if (USBDevice->Open(USBdev[0]))
     {
